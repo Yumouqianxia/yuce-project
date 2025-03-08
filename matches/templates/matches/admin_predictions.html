@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>管理员 - 所有预测</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .match-section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .match-header {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>所有用户预测</h1>
+        <div>
+            <a href="{% url 'admin:index' %}" class="btn">返回管理后台</a>
+        </div>
+    </div>
+    
+    {% if predictions_by_match %}
+        {% for match, predictions in predictions_by_match.items %}
+            <div class="match-section">
+                <div class="match-header">
+                    {{ match.team_a }} vs {{ match.team_b }} ({{ match.start_time|date:"Y-m-d H:i" }})
+                    <span style="margin-left: 20px;">
+                        状态: 
+                        {% if match.status == 'not_started' %}
+                            未开始
+                        {% elif match.status == 'in_progress' %}
+                            进行中
+                        {% else %}
+                            已结束 - 结果: {{ match.result_winner }} ({{ match.result_score }})
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>用户</th>
+                            <th>预测获胜</th>
+                            <th>预测比分</th>
+                            <th>获得积分</th>
+                            <th>提交时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prediction in predictions %}
+                            <tr>
+                                <td>{{ prediction.user.username }}</td>
+                                <td>{{ prediction.predicted_winner }}</td>
+                                <td>{{ prediction.predicted_score }}</td>
+                                <td>{{ prediction.points_earned }}</td>
+                                <td>{{ prediction.created_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>暂无预测记录</p>
+    {% endif %}
+</body>
+</html> 

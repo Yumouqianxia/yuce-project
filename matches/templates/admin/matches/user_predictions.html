@@ -1,0 +1,47 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h1>{{ user.username }} 的预测</h1>
+    
+    {% if predictions %}
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">比赛</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">预测获胜</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">预测比分</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">实际结果</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">获得积分</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">提交时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prediction in predictions %}
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">{{ prediction.match }}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">{{ prediction.predicted_winner }}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">{{ prediction.predicted_score }}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">
+                            {% if prediction.match.status == 'finished' %}
+                                {{ prediction.match.result_winner }} ({{ prediction.match.result_score }})
+                            {% else %}
+                                比赛未结束
+                            {% endif %}
+                        </td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">{{ prediction.points_earned }}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">{{ prediction.created_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>该用户没有提交任何预测</p>
+    {% endif %}
+    
+    <div style="margin-top: 20px;">
+        <a href="{% url 'admin:index' %}" style="margin-right: 10px;">返回管理后台</a>
+        <a href="{% url 'admin_predictions' %}">查看所有预测</a>
+    </div>
+</div>
+{% endblock %} 

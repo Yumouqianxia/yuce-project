@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数据一致性检查</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .error {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>数据一致性检查</h1>
+    
+    <div class="section">
+        <h2>已结束比赛</h2>
+        <p>总计: {{ finished_matches.count }} 场</p>
+        {% if matches_without_results.exists %}
+            <p class="error">警告: {{ matches_without_results.count }} 场已结束比赛没有结果</p>
+            <ul>
+                {% for match in matches_without_results %}
+                    <li>{{ match }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="success">所有已结束比赛都有结果</p>
+        {% endif %}
+    </div>
+    
+    <div class="section">
+        <h2>预测记录</h2>
+        <p>总计: {{ orphaned_predictions.count }} 条孤立预测记录</p>
+        {% if orphaned_predictions.exists %}
+            <p class="error">警告: 存在没有关联比赛的预测记录</p>
+            <ul>
+                {% for prediction in orphaned_predictions %}
+                    <li>{{ prediction }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="success">所有预测记录都有关联的比赛</p>
+        {% endif %}
+    </div>
+    
+    <div class="section">
+        <h2>积分一致性</h2>
+        <p>预测积分总和: {{ total_prediction_points }}</p>
+        <p>用户积分总和: {{ total_user_points }}</p>
+        {% if points_match %}
+            <p class="success">积分总和一致</p>
+        {% else %}
+            <p class="error">警告: 积分总和不一致</p>
+        {% endif %}
+    </div>
+    
+    <div>
+        <a href="{% url 'admin:index' %}" class="btn">返回管理后台</a>
+        <a href="{% url 'admin_predictions' %}" class="btn">查看所有预测</a>
+    </div>
+</body>
+</html> 

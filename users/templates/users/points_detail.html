@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>积分详情</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .total {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>积分详情</h1>
+        <div>
+            <a href="{% url 'profile' %}" class="btn">个人资料</a>
+            <a href="{% url 'match_list' %}" class="btn">比赛列表</a>
+        </div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>比赛</th>
+                <th>预测</th>
+                <th>实际结果</th>
+                <th>获得积分</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prediction in predictions %}
+                <tr>
+                    <td>{{ prediction.match.team_a }} vs {{ prediction.match.team_b }}</td>
+                    <td>{{ prediction.predicted_winner }} ({{ prediction.predicted_score }})</td>
+                    <td>
+                        {% if prediction.match.status == 'finished' %}
+                            {{ prediction.match.result_winner }} ({{ prediction.match.result_score }})
+                        {% else %}
+                            比赛未结束
+                        {% endif %}
+                    </td>
+                    <td>{{ prediction.points_earned }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">暂无预测记录</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="total">
+        总积分: {{ total_points }}
+    </div>
+    
+    <div class="nav-links" style="margin-top: 20px;">
+        <a href="{% url 'profile' %}">返回个人资料</a>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>调试积分</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>用户积分</h1>
+    <table>
+        <tr>
+            <th>用户名</th>
+            <th>积分</th>
+            <th>是否管理员</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.points }}</td>
+            <td>{{ user.is_superuser }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <h1>预测记录</h1>
+    <table>
+        <tr>
+            <th>用户</th>
+            <th>比赛</th>
+            <th>预测</th>
+            <th>结果</th>
+            <th>获得积分</th>
+        </tr>
+        {% for p in predictions %}
+        <tr>
+            <td>{{ p.user.username }}</td>
+            <td>{{ p.match }}</td>
+            <td>{{ p.predicted_winner }} ({{ p.predicted_score }})</td>
+            <td>
+                {% if p.match.status == 'finished' %}
+                    {{ p.match.result_winner }} ({{ p.match.result_score }})
+                {% else %}
+                    未结束
+                {% endif %}
+            </td>
+            <td>{{ p.points_earned }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html> 
