@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}错误{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <h1>出错了</h1>
+    
+    <div class="alert alert-danger">
+        <p>抱歉，系统遇到了一个错误。</p>
+        {% if error %}
+            <p><strong>错误信息:</strong> {{ error }}</p>
+        {% endif %}
+    </div>
+    
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-primary">返回首页</a>
+    </div>
+</div>
+{% endblock %} 
