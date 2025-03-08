@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure--%0-3nqlv389#y=)c!+0!4b@b-qk8!166755v7@6d$&ozocz7@"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # 正确的格式（没有额外缩进）
 ALLOWED_HOSTS = [
@@ -62,7 +63,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -128,9 +129,13 @@ AUTH_USER_MODEL = "users.CustomUser"
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# 使用staticfiles作为静态文件目录，不再使用STATIC_ROOT
+# STATIC_ROOT = BASE_DIR / "staticfiles"  # 注释掉这一行
+
+# 直接使用staticfiles作为静态文件源目录
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "staticfiles",
 ]
 
 # Default primary key field type
@@ -167,21 +172,6 @@ LOGGING = {
     },
 }
 
-# 添加媒体文件配置
+# 媒体文件配置
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-# 修复 STATICFILES_DIRS 的格式问题（当前有格式错误）
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]  # 修复这里的格式，添加空格
-
-# 添加安全设置（生产环境推荐）
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-
-# 添加会话配置
-SESSION_COOKIE_SECURE = True  # 如果使用 HTTPS
-CSRF_COOKIE_SECURE = True     # 如果使用 HTTPS
-SESSION_COOKIE_AGE = 1209600  # 两周，以秒为单位
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
