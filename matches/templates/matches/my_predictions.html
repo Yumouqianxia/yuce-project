@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我的预测</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>我的预测</h1>
+        <div>
+            <a href="{% url 'match_list' %}" class="btn">比赛列表</a>
+        </div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>比赛</th>
+                <th>预测获胜</th>
+                <th>预测比分</th>
+                <th>实际结果</th>
+                <th>获得积分</th>
+                <th>提交时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prediction in predictions %}
+                <tr>
+                    <td>{{ prediction.match.team_a }} vs {{ prediction.match.team_b }}</td>
+                    <td>{{ prediction.predicted_winner }}</td>
+                    <td>{{ prediction.predicted_score }}</td>
+                    <td>
+                        {% if prediction.match.status == 'finished' %}
+                            {{ prediction.match.result_winner }} ({{ prediction.match.result_score }})
+                        {% else %}
+                            比赛未结束
+                        {% endif %}
+                    </td>
+                    <td>{{ prediction.points_earned }}</td>
+                    <td>{{ prediction.created_at }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">您还没有提交任何预测</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html> 
