@@ -1,85 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>提交预测</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        select, input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn-cancel {
-            background-color: #f44336;
-        }
-        .match-info {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
-    <h1>提交预测</h1>
+{% extends 'base.html' %}
+
+{% block title %}提交预测{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">提交预测</h1>
     
-    <div class="match-info">
-        <h2>{{ match.team_a }} vs {{ match.team_b }}</h2>
-        <p>开始时间: {{ match.start_time|date:"Y-m-d H:i" }}</p>
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">{{ match.team_a }} vs {{ match.team_b }}</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>开始时间:</strong> {{ match.start_time|date:"Y-m-d H:i" }}</p>
+            <p><strong>比赛局数:</strong> {{ match.match_series|default:"BO3" }}</p>
+            <p><strong>比赛性质:</strong> {{ match.match_type|default:"常规赛" }}</p>
+        </div>
     </div>
     
-    <form method="post" action="{% url 'submit_prediction' match.id %}">
-        {% csrf_token %}
-        
-        <div class="form-group">
-            <label for="id_predicted_winner">预测获胜队伍:</label>
-            {{ form.predicted_winner }}
-            {% if form.predicted_winner.errors %}
-                <div class="error">{{ form.predicted_winner.errors }}</div>
-            {% endif %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">您的预测</h5>
         </div>
-        
-        <div class="form-group">
-            <label for="id_predicted_score">预测比分 (例如: 3-0):</label>
-            {{ form.predicted_score }}
-            {% if form.predicted_score.errors %}
-                <div class="error">{{ form.predicted_score.errors }}</div>
-            {% endif %}
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_predicted_winner">预测获胜队伍:</label>
+                    {{ form.predicted_winner }}
+                    {% if form.predicted_winner.errors %}
+                        <div class="text-danger">{{ form.predicted_winner.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_predicted_score">预测比分 (例如: 3-0):</label>
+                    {{ form.predicted_score }}
+                    {% if form.predicted_score.errors %}
+                        <div class="text-danger">{{ form.predicted_score.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-actions mt-4">
+                    <button type="submit" class="btn btn-info">提交预测</button>
+                    <a href="{% url 'match_list' %}" class="btn btn-secondary ml-2">取消</a>
+                </div>
+            </form>
         </div>
-        
-        <div class="form-actions">
-            <button type="submit" class="btn btn-info">提交预测</button>
-            <a href="{% url 'match_list' %}" class="btn btn-secondary">取消</a>
-        </div>
-    </form>
-    
-    <div style="margin-top: 20px;">
-        <a href="{% url 'match_list' %}">返回比赛列表</a>
     </div>
-</body>
-</html> 
+</div>
+{% endblock %} 
