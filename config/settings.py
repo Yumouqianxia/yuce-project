@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__)。resolve()。parent。parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,38 +24,36 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure--%0-3nqlv389#y=)c!+0!4b@b-qk8!166755v7@6d$&ozocz7@"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # 正确的格式（没有额外缩进）
 ALLOWED_HOSTS = [
-    "129.226.202.217",
-    "127.0.0.1",
-    "localhost",
-    "yuce.yumouqianxia.top",
+    "127.0.0.1"，
+    "localhost"，
 ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",   
-    "users",
-    "matches",
+    "django.contrib.admin"，
+    "django.contrib.auth"，
+    "django.contrib.contenttypes"，
+    "django.contrib.sessions"，
+    "django.contrib.messages"，
+    "django.contrib.staticfiles"，   
+    "users"，
+    "matches"，
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.security.SecurityMiddleware"，
+    "django.contrib.sessions.middleware.SessionMiddleware"，
+    "django.middleware.common.CommonMiddleware"，
+    "django.middleware.csrf.CsrfViewMiddleware"，
+    "django.contrib.auth.middleware.AuthenticationMiddleware"，
+    "django.contrib.messages.middleware.MessageMiddleware"，
+    "django.middleware.clickjacking.XFrameOptionsMiddleware"，
 ]
 
 ROOT_URLCONF = "config.urls"
