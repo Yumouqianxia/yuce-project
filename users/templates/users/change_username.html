@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}修改用户名{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">修改用户名</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <p><strong>重要提示：</strong></p>
+                        <ul>
+                            <li>用户名仅用于登录系统，只能包含英文字母和数字</li>
+                            <li>修改用户名后，您需要使用新用户名登录</li>
+                            <li>如果您想修改显示名称，请在个人资料中修改昵称</li>
+                        </ul>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="{{ form.username.id_for_label }}">新用户名</label>
+                            {{ form.username.errors }}
+                            <input type="text" name="{{ form.username.name }}" 
+                                   value="{{ form.username.value|default:'' }}" 
+                                   class="form-control" id="{{ form.username.id_for_label }}">
+                            <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">保存更改</button>
+                            <a href="{% url 'profile' %}" class="btn btn-secondary ml-2">取消</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

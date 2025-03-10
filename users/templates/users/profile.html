@@ -169,8 +169,8 @@
                     {% endif %}
                 </div>
                 <div class="profile-info">
-                    <h2>{{ user.username }}</h2>
-                    <p>{{ user.email }}</p>
+                    <h2>{{ user.nickname }}</h2>
+                    <p class="text-muted">@{{ user.username }}</p>
                     <p>注册时间: {{ user.date_joined|date:"Y年m月d日" }}</p>
                     <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-primary mt-2">编辑资料</a>
                 </div>
@@ -230,6 +230,10 @@
                     <a href="{% url 'match_list' %}" class="btn">去预测比赛</a>
                 </div>
             {% endif %}
+        </div>
+        
+        <div class="mt-2">
+            <a href="{% url 'change_password' %}" class="btn btn-sm btn-outline-secondary">修改密码</a>
         </div>
     </div>
 </body>

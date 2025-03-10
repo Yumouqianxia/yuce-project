@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}裁剪头像{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<style>
+    .cropper-container {
+        margin-bottom: 20px;
+    }
+    #preview {
+        width: 150px;
+        height: 150px;
+        border: 1px solid #ccc;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+    .img-container {
+        max-height: 400px;
+        margin-bottom: 20px;
+    }
+    .img-container img {
+        max-width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">裁剪头像</h4>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">请裁剪您的头像为正方形。您可以拖动和调整裁剪框的大小。</p>
+                    
+                    <div class="img-container">
+                        <img id="image" src="{{ avatar_url }}" alt="待裁剪的图片">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="d-flex flex-column">
+                                <label>预览</label>
+                                <div id="preview"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <form method="post" action="{% url 'save_cropped_avatar' %}">
+                                {% csrf_token %}
+                                <input type="hidden" id="x" name="x">
+                                <input type="hidden" id="y" name="y">
+                                <input type="hidden" id="width" name="width">
+                                <input type="hidden" id="height" name="height">
+                                <input type="hidden" id="avatar_path" name="avatar_path" value="{{ avatar_path }}">
+                                
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-primary">保存裁剪</button>
+                                    <a href="{% url 'edit_profile' %}" class="btn btn-secondary ml-2">取消</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const image = document.getElementById('image');
+        const preview = document.getElementById('preview');
+        const x = document.getElementById('x');
+        const y = document.getElementById('y');
+        const width = document.getElementById('width');
+        const height = document.getElementById('height');
+        
+        const cropper = new Cropper(image, {
+            aspectRatio: 1, // 强制1:1的比例
+            viewMode: 1,    // 限制裁剪框不超出图片的范围
+            preview: preview,
+            crop: function(event) {
+                x.value = Math.round(event.detail.x);
+                y.value = Math.round(event.detail.y);
+                width.value = Math.round(event.detail.width);
+                height.value = Math.round(event.detail.height);
+            }
+        });
+    });
+</script>
+{% endblock %} 
